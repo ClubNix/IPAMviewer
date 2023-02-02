@@ -5,8 +5,9 @@ from paramiko import SSHClient, ssh_exception
 from scp import SCPClient
 from dotenv import load_dotenv
 from os import getenv
+import socket
 
-class SSHClient():
+class SSHCPClient():
 
     load_dotenv()
 
@@ -16,30 +17,34 @@ class SSHClient():
 
     def __init__(self):
         self.ssh = SSHClient()
-        self.scp = SCPClient()
         self.ssh.load_system_host_keys()
 
     def get_weathermap(self) -> tuple[Path] | None:
 
-        if not SSHClient._WEATHERMAP_RDIR:
+        if not SSHCPClient._WEATHERMAP_RDIR:
             print("Error: Weather map directory not referenced")
             print("Skipping weathermap retrieval")
-            return
+            return False
 
-        weathermap_ldir = Path.cwd() / "weathermap"
+        weathermap_ldir = Path.cwd() / "ipamviewer" / "static" / "img" / "weathermap"
         Path.mkdir(weathermap_ldir, exist_ok=True)
 
         try:
             with self.ssh:
-                self.ssh.connect(hostname=SSHClient._HOST, username=SSHClient._USER)
+                print(socket.gethostbyname(socket.gethostname()))
+                print(SSHCPClient._USER)
+                self.ssh.connect(hostname=SSHCPClient._HOST, username=SSHCPClient._USER, timeout=3)
 
-                with self.scp(self.ssh.get_transport()):
-                    self.scp.get(SSHClient._WEATHERMAP_RDIR / "2.png", weathermap_ldir)
-                    self.scp.get(SSHClient._WEATHERMAP_RDIR / "3.png", weathermap_ldir)
+                with SCPClient(self.ssh.get_transport()) as scp:
+                    scp.get(SSHCPClient._WEATHERMAP_RDIR / "2.png", weathermap_ldir)
+                    scp.get(SSHCPClient._WEATHERMAP_RDIR / "3.png", weathermap_ldir)
         except ssh_exception.AuthenticationException as e:
             print(f"Error: {e}")
             print("Skipping weathermap retrieval")
+            return False
         
         print("Weathermap retrieved from supervisor")
 
-        return (weathermap_ldir / "2.png", weathermap_ldir / "3.png")
+        return True
+
+        

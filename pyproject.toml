@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "IPAMviewer"
-version = "0.3.0"
+version = "0.4.0"
 description = "Convenient IPAM's subnet viewer from phpIPAM for kiosk display"
-authors = ["Anemys <abdelmalik.kerbadou@edu.esiee.fr>", "Blackjack <theo.peresse-gourbil@edu.esiee.fr>"]
+authors = ["Anemys <abdelmalik.kerbadou@edu.esiee.fr>", "Redowla <camille.andias@gmail.com>", "Blackjack <theo.peresse-gourbil@edu.esiee.fr>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -12,6 +12,7 @@ flask = "^2.2.2"
 tzdata = "^2022.7"
 scp = "^0.14.5"
 paramiko = "^3.0.0"
+python-dotenv = "^0.21.1"
 
 [tool.poetry.scripts]
 ipamviewer = "ipamviewer.app:main"
@@ -19,7 +20,6 @@ ipamviewer = "ipamviewer.app:main"
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
 flake8 = "^6.0.0"
-python-dotenv = "^0.21.1"
 
 [build-system]
 requires = ["poetry-core"]

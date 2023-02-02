@@ -6,33 +6,32 @@
     <meta http-equiv="refresh" content="300">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPAMviewer</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
 </head>
 
 <body>
-    <div class="p-3 mb-4 text-center bg-dark">
-        <h2>IPAMviewer</h2>
-        <h4>Last update : {{ utc_dt.strftime('%H:%M:%S %d/%m') }}</h4>
-    </div>
+    <header class="upperbox">
+        <h1>IPAMviewer</h1>
+        <h3>Last update : {{ utc_dt.strftime('%H:%M:%S %d/%m') }}</h3>
+    </header>
 
-    <div class="container-fluid table-responsive">
-        <div class="row align-items-start justify-content-center">
-            {% for subnet in subnets %}
-            <div class="col-auto">
-                <table class="table table-dark table-striped table-hover table-sm align-middle text-center d-inline">
+    <main>
+        <div class="grid-container">
+            {% for subnet in selected_subnets %}
+            <div class="tab{{ loop.index }}">
+                <table>
                     <thead>
-                        <tr>
+                        <tr class="tabtitle">
                             <th colspan="4">{{ subnet["description"] }}</th>
                         </tr>
-                        <tr>
+                        <tr class="tabtitle">
                             <th>State</th>
                             <th>IP</th>
                             <th>Hostname</th>
                             <th>Description</th>
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider">
+                    <tbody>
                         {% for host in subnet["hosts"] %}
                         <tr>
                             <td>
@@ -59,13 +58,17 @@
                 </table>
             </div>
             {% endfor %}
+            {% if weathermap_exists == True %}
+            <div class="tab4">
+                <img src="/static/img/weathermap/2.png" alt="weathermap">
+            </div>
+            {% endif %}
         </div>
-    </div>
-    <footer class="text-lg-start fixed-bottom mt-3">
-        <div class="bg-dark text-center p-3 mt-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            Made with love by
-            <a class="text-light" href="www.clubnix.fr"> Club*Nix</a>
-        </div>
+    </main>
+    <footer class="bottombox">
+        
+            Made with love by <a href="www.clubnix.fr">Club*Nix</a>
+        
     </footer>
 
 </body>

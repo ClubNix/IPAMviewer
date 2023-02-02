@@ -170,4 +170,3 @@ poetry.toml
 ### Project file ###
 weathermap/
 tests/*.json
-ipamviewer/static/img/weathermap/
