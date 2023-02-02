@@ -3,16 +3,19 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
-import os
+from dotenv import load_dotenv
+from os import getenv
 
 class APIClient:
+
+    load_dotenv()
 
     _BASE_URL = "https://ipamix.clubnix.fr/api/"
     _AUTHENT_API = "user/"
     _SUBNETS_API = "subnets/"
-    _API_ID = os.getenv('IPAM_API_ID')
-    _USER = os.getenv('IPAM_USER')
-    _PASS = os.getenv('IPAM_PASS')
+    _API_ID = getenv('IPAM_API_ID')
+    _USER = getenv('IPAM_USER')
+    _PASS = getenv('IPAM_PASS')
 
     def __init__(self):
         self.session = requests.Session()
