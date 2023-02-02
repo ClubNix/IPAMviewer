@@ -1,0 +1,29 @@
+html body {
+    background: url(../img/bg.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: repeat;
+    height: 100% !important;
+    min-height: 100% !important;
+    color: #e5e5e5;
+    background-color: transparent;
+}
+
+.margin-top {
+    margin-top: 3%;
+}
+
+/* table {
+    display: inline;
+    margin-left: 3%;
+} */
+
+.filled-footer {
+    flex: 1;
+}
+
+.container-xxl {
+    max-width: 1600px;
+}
