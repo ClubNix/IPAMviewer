@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "IPAMviewer"
-version = "0.4.0"
-description = "Convenient IPAM's subnet viewer from phpIPAM for kiosk display"
-authors = ["Anemys <abdelmalik.kerbadou@edu.esiee.fr>", "Redowla <camille.andias@gmail.com>", "Blackjack <theo.peresse-gourbil@edu.esiee.fr>"]
+version = "0.5.0"
+description = "Convenient IPAM's subnet viewer from phpIPAM for kiosk display with display of Centreon weathermaps"
+authors = ["Anemys <abdelmalik.kerbadou@edu.esiee.fr>", "Redowla <camille.andias@gmail.com>", "Blackjack <theo.peresse-gourbil@edu.esiee.fr>", "Isnubi <louis.gambart@edu.esiee.fr>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
