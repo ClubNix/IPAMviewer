@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from pathlib import Path
-from paramiko import SSHClient, ssh_exception
+from paramiko import SSHClient, ssh_exception, RSAKey
 from scp import SCPClient
 from dotenv import load_dotenv
 from os import getenv
@@ -36,8 +36,15 @@ class SSHCPClient():
                 self.ssh.connect(hostname=SSHCPClient._HOST, username=SSHCPClient._USER, timeout=3)
 
                 with SCPClient(self.ssh.get_transport()) as scp:
-                    scp.get(SSHCPClient._WEATHERMAP_RDIR / "2.png", weathermap_ldir)
-                    scp.get(SSHCPClient._WEATHERMAP_RDIR / "3.png", weathermap_ldir)
+                    stdin, stdout, stderr = self.ssh.exec_command(f"ls {SSHCPClient._WEATHERMAP_RDIR} | grep '^[0-9]+.png$'")
+                    if not stdout:
+                        print("Error: No weathermap files found")
+                        print("Skipping weathermap retrieval")
+                        return False
+                    else:
+                        for line in stdout:
+                            scp.get(SSHCPClient._WEATHERMAP_RDIR / line.strip(), weathermap_ldir)
+
         except ssh_exception.AuthenticationException as e:
             print(f"Error: {e}")
             print("Skipping weathermap retrieval")
