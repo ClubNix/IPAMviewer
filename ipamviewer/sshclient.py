@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from pathlib import Path
 from paramiko import SSHClient, ssh_exception, RSAKey
 from scp import SCPClient
@@ -7,8 +5,7 @@ from dotenv import load_dotenv
 from os import getenv
 import socket
 
-class SSHCPClient():
-
+class SSHCPClient:
     load_dotenv()
 
     _HOST = getenv('SSH_HOST')
