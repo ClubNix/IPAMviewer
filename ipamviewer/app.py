@@ -10,18 +10,20 @@ disable_warnings()
 
 app = Flask(__name__)
 
+exclude_subnets = "10.0.2.0"
+
 @app.route('/')
 def hello():
-    apiClient = APIClient()
+    api_client = APIClient()
     try:
         content = {}
-        apiClient.connect()
-        subnets = apiClient.get_subnets_list()
+        api_client.connect()
+        subnets = api_client.get_subnets_list()
         for subnet in subnets:
-            subnet["hosts"] = apiClient.get_hosts_list(subnet)
-        content["selected_subnets"] = [subnet for subnet in subnets if subnet["subnet"] != "10.0.2.0"]
-        sshClient = SSHCPClient() # supervinix dans 103 -> ouverture port vers 42 pour test
-        content["weathermap_exists"] = sshClient.get_weathermap()
+            subnet["hosts"] = api_client.get_hosts_list(subnet)
+        content["selected_subnets"] = [subnet for subnet in subnets if subnet["subnet"] != exclude_subnets]
+        ssh_client = SSHCPClient()
+        content["weathermap_exists"] = ssh_client.get_weathermap()
         return render_template('index.html', utc_dt=datetime.datetime.now(tz=ZoneInfo("Europe/Paris")), **content)
     except ConnectionError as e:
         return render_template("error.html", error=e)
