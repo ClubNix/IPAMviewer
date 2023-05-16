@@ -10,7 +10,6 @@ from os import getenv
 timezone = "Europe/Paris"
 
 class APIClient:
-
     load_dotenv()
 
     _BASE_URL = "https://ipamix.clubnix.fr/api/"
@@ -29,32 +28,32 @@ class APIClient:
         try_nb = 0
         print(type(APIClient._USER))
         while try_nb < 5:
-            rq = self.session.post(
+            api_request = self.session.post(
                 APIClient._BASE_URL + APIClient._API_ID + APIClient._AUTHENT_API,
                 auth = (APIClient._USER, APIClient._PASS),
             )
 
-            if rq.status_code != requests.codes.ok:
-                self.logger.critical(f"Error {rq.status_code}")
+            if api_request.status_code != requests.codes.ok:
+                self.logger.critical(f"Error {api_request.status_code}")
                 self.logger.info(f"Retry #{try_nb}")
                 try_nb += 1
             else:
                 break
         
         if try_nb >= 5:
-            raise requests.ConnectionError("IPAM API is unreachable...\n" + str(rq.json()))
+            raise requests.ConnectionError("IPAM API is unreachable...\n" + str(api_request.json()))
         
-        self.session.headers = {"token": rq.json()["data"]["token"]}
+        self.session.headers = {"token": api_request.json()["data"]["token"]}
 
     def _get_data(self, endpoint, keys):
-        rq = self.session.get(endpoint)
+        api_request = self.session.get(endpoint)
 
-        if rq.status_code != requests.codes.ok:
-            self.logger.critical(f"Error {rq.status_code} : IPAM API is unreachable...\n" + rq.json()["message"])
+        if api_request.status_code != requests.codes.ok:
+            self.logger.critical(f"Error {api_request.status_code} : IPAM API is unreachable...\n" + api_request.json()["message"])
             return False
         
         data = []
-        for elm in rq.json()["data"]:
+        for elm in api_request.json()["data"]:
             data.append({key: elm[key] for key in keys})
         
         return data
