@@ -6,6 +6,9 @@ from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 from os import getenv
 
+
+timezone = "Europe/Paris"
+
 class APIClient:
 
     load_dotenv()
@@ -69,8 +72,8 @@ class APIClient:
             ["ip", "description", "hostname", "mac", "lastSeen", "note", "port"]
             )
         for host in hosts:
-            last_seen = datetime.strptime(host["lastSeen"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=ZoneInfo("Europe/Paris"))
-            now = datetime.now(tz=ZoneInfo("Europe/Paris"))
+            last_seen = datetime.strptime(host["lastSeen"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=ZoneInfo(timezone))
+            now = datetime.now(tz=ZoneInfo(timezone))
             if now - last_seen <= timedelta(minutes=11.0):
                 host["status"] = True
             else:
