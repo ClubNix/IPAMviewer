@@ -1,5 +1,5 @@
 from pathlib import Path
-from paramiko import SSHClient, ssh_exception, RSAKey
+from paramiko import SSHClient, ssh_exception, AutoAddPolicy
 from scp import SCPClient
 from dotenv import load_dotenv
 from os import getenv
@@ -16,6 +16,7 @@ class WeathermapRetriever:
     def __init__(self):
         self.ssh = SSHClient()
         self.ssh.load_system_host_keys()
+        self.ssh.set_missing_host_key_policy(AutoAddPolicy())
         self.weathermap_ldir = Path(mkdtemp())
 
     def get_weathermap(self) -> tuple[Path] | None:
