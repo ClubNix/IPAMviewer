@@ -1,5 +1,5 @@
 from .apiclient import APIClient
-from .sshclient import SSHCPClient
+from .sshclient import WeathermapRetriever
 from flask import Flask, render_template
 from requests import ConnectionError
 import datetime
@@ -22,7 +22,7 @@ def hello():
         for subnet in subnets:
             subnet["hosts"] = api_client.get_hosts_list(subnet)
         content["selected_subnets"] = [subnet for subnet in subnets if subnet["subnet"] != exclude_subnets]
-        ssh_client = SSHCPClient()
+        ssh_client = WeathermapRetriever()
         content["weathermap_exists"] = ssh_client.get_weathermap()
         return render_template('index.html', utc_dt=datetime.datetime.now(tz=ZoneInfo("Europe/Paris")), **content)
     except ConnectionError as e:

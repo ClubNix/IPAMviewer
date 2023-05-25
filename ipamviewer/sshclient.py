@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from os import getenv
 import socket
 
-class SSHCPClient:
+class WeathermapRetriever:
     load_dotenv()
 
     _HOST = getenv('SSH_HOST')
@@ -18,7 +18,7 @@ class SSHCPClient:
 
     def get_weathermap(self) -> tuple[Path] | None:
 
-        if not SSHCPClient._WEATHERMAP_RDIR:
+        if not WeathermapRetriever._WEATHERMAP_RDIR:
             print("Error: Weather map directory not referenced")
             print("Skipping weathermap retrieval")
             return False
@@ -29,18 +29,18 @@ class SSHCPClient:
         try:
             with self.ssh:
                 print(socket.gethostbyname(socket.gethostname()))
-                print(SSHCPClient._USER)
-                self.ssh.connect(hostname=SSHCPClient._HOST, username=SSHCPClient._USER, timeout=3)
+                print(WeathermapRetriever._USER)
+                self.ssh.connect(hostname=WeathermapRetriever._HOST, username=WeathermapRetriever._USER, timeout=3)
 
                 with SCPClient(self.ssh.get_transport()) as scp:
-                    stdin, stdout, stderr = self.ssh.exec_command(f"ls {SSHCPClient._WEATHERMAP_RDIR} | grep '^[0-9]+.png$'")
+                    stdin, stdout, stderr = self.ssh.exec_command(f"ls {WeathermapRetriever._WEATHERMAP_RDIR} | grep '^[0-9]+.png$'")
                     if not stdout:
                         print("Error: No weathermap files found")
                         print("Skipping weathermap retrieval")
                         return False
                     else:
                         for line in stdout:
-                            scp.get(SSHCPClient._WEATHERMAP_RDIR / line.strip(), weathermap_ldir)
+                            scp.get(WeathermapRetriever._WEATHERMAP_RDIR / line.strip(), weathermap_ldir)
 
         except ssh_exception.AuthenticationException as e:
             print(f"Error: {e}")
